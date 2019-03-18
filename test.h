@@ -11,8 +11,8 @@ public:
     bool vector2d_qFuzzyCompare(const QVector2D a, const QVector2D b);
     bool vector3d_qFuzzyCompare(const QVector3D a, const QVector3D b);
 private slots:
-    void test_vertex3D_from_strings01();
-    void test_vertex2D_from_strings01();
+    void test_vertex3D_from_strings();
+    void test_vertex2D_from_strings();
     void test_face_indices_from_string();
     void test_file_import();
 

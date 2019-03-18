@@ -23,14 +23,10 @@ bool Test::vector3d_qFuzzyCompare(const QVector3D a, const QVector3D b)
     return true;
 }
 
-void Test::test_vertex3D_from_strings01()
+void Test::test_vertex3D_from_strings()
 {
     QVector3D vertex;
     QString error = NULL;
-
-    //QCOMPARE(ObjParser::vertex3D_from_strings({"v", "1", "2", "3"}), QVector3D(1, 2, 3));
-    //QCOMPARE(ObjParser::vertex3D_from_strings({"v", "1", "2", "3e-1"}), QVector3D(1, 2, 0.3));
-//    QVERIFY(qFuzzyCompare(1, 0));
 
     QVERIFY(!ObjParser::vertex3D_from_strings({"v", "1", "2"}, vertex, error));
     QVERIFY(!ObjParser::vertex3D_from_strings({"v", "1", "2", "3", "4"}, vertex, error));
@@ -40,7 +36,7 @@ void Test::test_vertex3D_from_strings01()
     QVERIFY(vector3d_qFuzzyCompare(vertex, QVector3D(1, 2, 0.3)));
 }
 
-void Test::test_vertex2D_from_strings01()
+void Test::test_vertex2D_from_strings()
 {
     QVector2D vertex;
     QString error = NULL;
@@ -235,7 +231,6 @@ void Test::test1_parse_obj()
 
 void Test::test_file_import()
 {
-
     QVector<QVector3D> vertices;
     QVector<QVector2D> t_vertices;
     QVector<int> face_vertices;

@@ -2,17 +2,12 @@
 #define OBJPARSER_H
 
 #include <QVector>
-#include <QVector4D>
 #include <QVector3D>
 #include <QVector2D>
 #include <QString>
 #include <QStringList>
 #include <QFile>
 #include <QTextStream>
-#include <iostream>
-#include <fstream>
-
-using namespace std;
 
 namespace ObjParser
 {
@@ -32,7 +27,6 @@ namespace ObjParser
                                         QVector<int> &face_texture_indices, QVector<int> &face_normal_indices,
                                         QVector<int> &start_pointers, const int vertices_count,
                                       const int texture_vertices_count, QString &error);
-
 }
 
 #endif // OBJPARSER_H

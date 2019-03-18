@@ -27,11 +27,17 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     objparser.cpp \
     matrix_oper.cpp \
-    test.cpp
+    test.cpp \
+    model.cpp \
+    camera.cpp \
+    world.cpp
 
 HEADERS  += mainwindow.h \
     objparser.h \
     matrix_oper.h \
-    test.h
+    test.h \
+    model.h \
+    camera.h \
+    world.h
 
 FORMS    += mainwindow.ui
