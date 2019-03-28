@@ -63,6 +63,12 @@ void Test::test_face_indices_from_string()
     QVector<int> example1 = {1,2,3};
     QVector<int> example2 = {1,2,3,4,5};
 
+    QVERIFY(!ObjParser::face_indices_from_string({"f"}, v_index, vt_index, vn_index,
+                                                start_pointers, vertices_count, vertices_count, error));
+
+    QVERIFY(!ObjParser::face_indices_from_string({"f", "1/1"}, v_index, vt_index, vn_index,
+                                                start_pointers, vertices_count, vertices_count, error));
+
     QVERIFY(ObjParser::face_indices_from_string({"f", "1/1", "2/ 2", "3/3"}, v_index, vt_index, vn_index,
                                                 start_pointers, vertices_count, vertices_count, error));
     QCOMPARE(v_index, example1);

@@ -9,6 +9,10 @@
 #include <QVector3D>
 #include <QVector2D>
 #include "objparser.h"
+#include "drawstuff.h"
+#include "scene.h"
+#include <QPen>
+
 
 namespace Ui
 {
@@ -29,12 +33,8 @@ class MainWindow : public QMainWindow
     private:
         Ui::MainWindow *ui;
         QPushButton *open_button;
-        QVector<QVector3D> vertices;
-        QVector<QVector2D> t_vertices;
-        QVector<int> face_vertices;
-        QVector<int> face_t_vertices;
-        QVector<int> face_n_vertices;
-        QVector<int> start_pointers;
+        Scene scene;
+        DrawStuff drawer;
 
     protected:
         void paintEvent(QPaintEvent *event);

@@ -30,7 +30,8 @@ SOURCES += main.cpp\
     test.cpp \
     model.cpp \
     camera.cpp \
-    world.cpp
+    scene.cpp \
+    drawstuff.cpp
 
 HEADERS  += mainwindow.h \
     objparser.h \
@@ -38,6 +39,7 @@ HEADERS  += mainwindow.h \
     test.h \
     model.h \
     camera.h \
-    world.h
+    scene.h \
+    drawstuff.h
 
 FORMS    += mainwindow.ui

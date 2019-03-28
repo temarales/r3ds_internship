@@ -12,3 +12,10 @@ Camera::Camera()
 {
 
 }
+
+QMatrix4x4 Camera::view_matrix()
+{
+    QMatrix4x4 view_m;
+    view_m.lookAt(camera_target, camera_position, up_vector);
+    return view_m;
+}
