@@ -9,6 +9,7 @@ MainWindow::MainWindow(QWidget *parent) :
     open_button = new QPushButton("Import File", this);
     open_button->setGeometry(QRect(QPoint(300, 400), QSize(200, 50)));
     connect(open_button, SIGNAL (released()), this, SLOT (handleButton()));
+    camera = Camera(QVector3D(10, 10, 10), QVector3D(0, 0, 0), QVector3D(0, 1, 0));
     Scene scene();
 }
 
@@ -30,14 +31,29 @@ void MainWindow::paintEvent(QPaintEvent *event)
     QPainter painter(this);
     QPen linepen(Qt::red);
     linepen.setCapStyle(Qt::RoundCap);
-    linepen.setWidth(10);
+    linepen.setWidth(1);
     painter.setRenderHint(QPainter::Antialiasing,true);
     painter.setPen(linepen);
+
     /*Camera(const QVector3D in_camera_position,
            const QVector3D in_camera_target,
            const QVector3D in_up_vector);*/
-    DrawStuff drawer(Camera(QVector3D(10, 10, 10), QVector3D(0, 0, 0), QVector3D(0, 1, 0)), scene, int(this->width()), int(this->height()));
+    DrawStuff drawer(camera, scene, int(this->width()), int(this->height()));
     drawer.draw_all(painter);
+}
+
+void MainWindow::keyPressEvent(QKeyEvent *ev)
+{
+    if(ev->key() == Qt::Key_W)
+        camera.moveCloserOrFurther(2);
+    if(ev->key() == Qt::Key_S)
+        camera.moveCloserOrFurther(-2);
+    if(ev->key() == Qt::Key_D)
+        camera.moveHorizontal(2);
+    if (ev->key() == Qt::Key_A)
+        camera.moveHorizontal(-2);
+
+    repaint();
 }
 
 

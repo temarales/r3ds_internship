@@ -35,9 +35,11 @@ class MainWindow : public QMainWindow
         QPushButton *open_button;
         Scene scene;
         DrawStuff drawer;
+        Camera camera;
 
     protected:
         void paintEvent(QPaintEvent *event);
+        void keyPressEvent(QKeyEvent *ev);
 };
 
 #endif // MAINWINDOW_H

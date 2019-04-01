@@ -19,3 +19,23 @@ QMatrix4x4 Camera::view_matrix()
     view_m.lookAt(camera_target, camera_position, up_vector);
     return view_m;
 }
+
+void Camera::changeCameraPositionOn(QVector3D shift)
+{
+    camera_position += shift;
+}
+
+void Camera::moveVertical(int value)
+{
+    camera_position.setY(camera_position.y() + value);
+}
+
+void Camera::moveHorizontal(int value)
+{
+    camera_position.setX(camera_position.x() + value);
+}
+
+void Camera::moveCloserOrFurther(int value)
+{
+    camera_position.setZ(camera_position.z() + value);
+}

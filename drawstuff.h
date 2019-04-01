@@ -21,6 +21,7 @@ public:
     int screen_height;
 
     void draw_all(QPainter &painter);
+    void drawModel(QPainter &painter, const Model &model);
 
 };
 

@@ -20,9 +20,10 @@ public:
     QVector3D camera_target;   // Указывает куда вы смотрите в мировом пространстве
     QVector3D up_vector; // Вектор, определяющий ориентацию камеры
 
-    /*QVector3D x_vector;
-    QVector3D y_vector;
-    QVector3D z_vector;*/
+    void moveVertical(int value);
+    void moveHorizontal(int value);
+    void changeCameraPositionOn(QVector3D shift);
+    void moveCloserOrFurther(int value);
 
 //    //Getter
 //    QVector3D xVector() const;
