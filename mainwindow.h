@@ -8,7 +8,7 @@
 #include <QVector>
 #include <QVector3D>
 #include <QVector2D>
-#include "objparser.h"
+#include "GeometryStack/objparser.h"
 #include "drawstuff.h"
 #include "scene.h"
 #include <QPen>

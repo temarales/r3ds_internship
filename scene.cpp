@@ -2,16 +2,16 @@
 
 Scene::Scene()
 {
-    QVector<Model> models();
+    QVector<Model> models;
 }
 
-Scene::Scene(const QVector<Model> &in_models)
+Scene::Scene(const QVector<Model> &inModels)
 {
-    models = in_models;
+    models = inModels;
 }
 
-void Scene::add_new_model(const Model &new_model)
+void Scene::addNewModel(const Model &newModel)
 {
-    models.push_back(new_model);
+    models.push_back(newModel);
 }
 

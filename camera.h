@@ -13,7 +13,7 @@ public:
            const QVector3D in_up_vector);
 //    static Camera fromSomeThreeVectors();
     Camera();
-    QMatrix4x4 view_matrix();
+    QMatrix4x4 view_matrix() const;
 
 
     QVector3D camera_position; // Позиция камеры в мировом пространстве

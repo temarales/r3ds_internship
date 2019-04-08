@@ -9,17 +9,34 @@
 #include "camera.h"
 
 namespace Matrix_Oper {
-QVector<QVector2D> vertices_for_drawing(
-        const QVector<QVector3D> &vertices, Camera &camera, const int &width, const int &height,
+
+QVector<QVector2D> verticesForDrawing(
+        const QVector<QVector3D> &vertices, const Camera &camera, const int &width, const int &height,
         const qreal angle, const qreal nearPlane, const qreal farPlane);
-QVector<QPointF> points_for_drawing(const QVector<QVector2D> &vertices);
-QVector<QVector2D> world_to_screen(const QVector<QVector3D> &vertices, const int &width, const int &height);
-QVector<QVector4D> project_vertices_to_4d(const QVector<QVector3D> &vertices);
-QVector<QVector3D> retro_project_vertices_to3d(const QVector<QVector4D> &vertices4d);
-void transform_vertices(QVector<QVector4D> &vertices, const QMatrix4x4 mvp);
-QMatrix4x4 frustum_matrix(const qreal left, const qreal right, const qreal bottom, const qreal top, const qreal nearPlane, const qreal farPlane);
-QMatrix4x4 perspective_matrix(const qreal angle, const qreal aspect, const qreal nearPlane, const qreal farPlane);
-QMatrix4x4 create_model_view_projection_matrix(Camera &camera, const qreal angle, const qreal aspect, const qreal nearPlane, const qreal farPlane);
+
+QVector<QPointF> pointsForDrawing(const QVector<QVector2D> &vertices);
+
+QVector<QVector2D> worldToScreen(
+        const QVector<QVector3D> &vertices,
+        const int &screenWidth, const int &sreenHeight);
+
+QVector<QVector4D> projectVerticesTo4d(const QVector<QVector3D> &vertices);
+
+QVector<QVector3D> projectVerticesTo3d(const QVector<QVector4D> &vertices4d);
+
+void transformVertices(QVector<QVector4D> &vertices, const QMatrix4x4 mvp);
+
+QMatrix4x4 frustumMatrix(
+        const qreal left, const qreal right, const qreal bottom,
+        const qreal top, const qreal nearPlane, const qreal farPlane);
+
+QMatrix4x4 perspectiveMatrix(
+        const qreal angle, const qreal aspect,
+        const qreal nearPlane, const qreal farPlane);
+
+QMatrix4x4 createModelViewProjectionMatrix(
+        const Camera &camera, const qreal angle, const qreal aspect,
+        const qreal nearPlane, const qreal farPlane);
 }
 
 #endif // MATRIX_OPER_H

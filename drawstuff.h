@@ -13,14 +13,16 @@ class DrawStuff
 {
 public:
     DrawStuff();
-    DrawStuff(const Camera &in_camera, const Scene &in_scene_for_drawing, const int in_width, const int in_height);
+    DrawStuff(
+            const Camera &inCamera, const Scene &inSceneForDrawing,
+            const int inScreenWidth, const int inScreenHeight);
 
-    Scene scene_for_drawing;
+    Scene sceneForDrawing;
     Camera camera;
-    int screen_width;
-    int screen_height;
+    int screenWidth;
+    int screenHeight;
 
-    void draw_all(QPainter &painter);
+    void drawAll(QPainter &painter);
     void drawModel(QPainter &painter, const Model &model);
 
 };

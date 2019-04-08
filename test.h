@@ -2,6 +2,7 @@
 #define TEST_H
 
 #include <QTest>
+#include "GeometryStack/objparser.h"
 
 class Test : public QObject
 {

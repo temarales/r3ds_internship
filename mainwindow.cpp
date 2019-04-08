@@ -7,10 +7,10 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     open_button = new QPushButton("Import File", this);
-    open_button->setGeometry(QRect(QPoint(300, 400), QSize(200, 50)));
+    open_button->setGeometry(QRect(QPoint(0, 0), QSize(200, 50)));
     connect(open_button, SIGNAL (released()), this, SLOT (handleButton()));
     camera = Camera(QVector3D(10, 10, 10), QVector3D(0, 0, 0), QVector3D(0, 1, 0));
-    Scene scene();
+    Scene scene;
 }
 
 void MainWindow::handleButton()
@@ -19,8 +19,8 @@ void MainWindow::handleButton()
                                     QString::fromUtf8("Open file"),
                                     QDir::currentPath(),
                                     "Models (*.obj);;All files (*.*)");
-    Model new_model = Model::model_from_file(fileName);
-    scene.add_new_model(new_model);
+    Model newModel = Model::modelFromFile(fileName);
+    scene.addNewModel(newModel);
 
     repaint();
 }
@@ -35,19 +35,16 @@ void MainWindow::paintEvent(QPaintEvent *event)
     painter.setRenderHint(QPainter::Antialiasing,true);
     painter.setPen(linepen);
 
-    /*Camera(const QVector3D in_camera_position,
-           const QVector3D in_camera_target,
-           const QVector3D in_up_vector);*/
     DrawStuff drawer(camera, scene, int(this->width()), int(this->height()));
-    drawer.draw_all(painter);
+    drawer.drawAll(painter);
 }
 
 void MainWindow::keyPressEvent(QKeyEvent *ev)
 {
     if(ev->key() == Qt::Key_W)
-        camera.moveCloserOrFurther(2);
-    if(ev->key() == Qt::Key_S)
         camera.moveCloserOrFurther(-2);
+    if(ev->key() == Qt::Key_S)
+        camera.moveCloserOrFurther(2);
     if(ev->key() == Qt::Key_D)
         camera.moveHorizontal(2);
     if (ev->key() == Qt::Key_A)

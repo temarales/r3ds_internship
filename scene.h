@@ -2,16 +2,16 @@
 #define SCENE_H
 
 #include "camera.h"
-#include "model.h"
+#include "GeometryStack/model.h"
 
 class Scene
 {
 public:
     Scene();
-    Scene(const QVector<Model> &in_models);
+    Scene(const QVector<Model> &inModels);
     QVector<Model> models;
 
-    void add_new_model(const Model &new_model);
+    void addNewModel(const Model &newModel);
 
 };
 
