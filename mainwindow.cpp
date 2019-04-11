@@ -20,6 +20,8 @@ void MainWindow::handleButton()
                                     QDir::currentPath(),
                                     "Models (*.obj);;All files (*.*)");
     Model newModel = Model::modelFromFile(fileName);
+    QString error;
+    newModel.triangulate(error);
     scene.addNewModel(newModel);
 
     repaint();

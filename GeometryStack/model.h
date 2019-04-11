@@ -21,11 +21,27 @@ public:
     QVector<int> faceVertexIndices;
     QVector<int> faceVertexTextureIndices;
     QVector<int> faceNormalIndices;
-    QVector<int> startPointers;
+    QVector<int> startPolygonOffsets;
 
+    QVector<int> triangledFaceVertexIndices;
+    QVector<int> triangledFaceTextureVertexIndices;
     static Model modelFromFile(const QString &filename);
-    void triangulate();
+    bool triangulate(
+            QVector<int> &triangledFaceTextureVertexIndices, QVector<int> &triangledFaceVertexIndices,
+            QVector<int> &polygonOffsets) const;
+    bool triangulate(QString &error);
+    bool isPolygonConvex(int startOffset, QVector<int> &polygonOffsets) const;
+    float isPositiveValue(
+            const int vertexIndex, const int currentPolygonOffset,
+            const int nextPolygonOffset) const;
 
+private:
+    void addVertexTriangle(
+            QVector<int> &triangledFaceVertexIndices, const int firstIndex,
+            const int secondIndex, const int thirdIndex) const;
+    void addTextureVertexTriangle(
+            QVector<int> &triangledFaceTextureVertexIndices, const int firstIndex,
+            const int secondIndex, const int thirdIndex) const;
 };
 
 #endif // MODEL_H

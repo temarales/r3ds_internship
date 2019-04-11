@@ -13,6 +13,8 @@ QVector<QVector2D> Matrix_Oper::verticesForDrawing(
     return drawVertices;
 }
 
+
+
 QVector<QPointF> Matrix_Oper::pointsForDrawing(const QVector<QVector2D> &vertices)
 {
     QVector<QPointF> points;

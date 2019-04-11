@@ -11,3 +11,7 @@ SOURCES += \
     $$PWD/geometrystacktests.cpp
 
 }
+
+HEADERS +=
+
+SOURCES +=

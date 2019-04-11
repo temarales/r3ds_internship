@@ -80,6 +80,12 @@ bool ObjParser::faceIndicesFromString(
     //bool with_texture = false;
     //bool with_normal = false;
 
+    if (content.size() < 3)
+    {
+        error = "Polygon is too small.\n";
+        return false;
+    }
+
     for (int i = 1; i < content.size(); i++)
     {
 

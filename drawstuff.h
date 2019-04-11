@@ -24,6 +24,7 @@ public:
 
     void drawAll(QPainter &painter);
     void drawModel(QPainter &painter, const Model &model);
+    void drawTriangulatedModel(QPainter &painter, const Model &model);
 
 };
 
