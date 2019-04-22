@@ -22,6 +22,7 @@ void MainWindow::handleButton()
     Model newModel = Model::modelFromFile(fileName);
     QString error;
     newModel.triangulate(error);
+    newModel.calculateNewNormals();
     scene.addNewModel(newModel);
 
     repaint();

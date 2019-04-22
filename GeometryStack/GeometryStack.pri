@@ -4,10 +4,12 @@ INCLUDEPATH += $$PWD/../
 
 HEADERS += \
     $$PWD/model.h \
-    $$PWD/objparser.h
+    $$PWD/objparser.h \
+    $$PWD/tranformationsformodel.h
 
 SOURCES += \
     $$PWD/model.cpp \
-    $$PWD/objparser.cpp
+    $$PWD/objparser.cpp \
+    $$PWD/tranformationsformodel.cpp
 
 }

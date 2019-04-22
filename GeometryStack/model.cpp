@@ -35,11 +35,17 @@ Model Model::modelFromFile(const QString &filename)
     return newModel;
 }
 
+
 bool Model::triangulate(QString &error)
 {
     QVector<int> triangledFaceTextureVertexIndices;
     QVector<int> triangledFaceVertexIndices;
-    if (!triangulate(triangledFaceTextureVertexIndices, triangledFaceVertexIndices, this->startPolygonOffsets)) {
+    if (this->faceVertexTextureIndices.count() == 0) {
+        error = "Triangulation has crashed, there are no texture vertices\n";
+        return false;
+    }
+    if (!TranformationsForModel::triangulate(triangledFaceTextureVertexIndices, triangledFaceVertexIndices,
+                     this->startPolygonOffsets, this->faceVertexIndices, this->faceVertexTextureIndices)) {
         error = "Triangulation has crashed\n";
         return false;
     }
@@ -48,33 +54,23 @@ bool Model::triangulate(QString &error)
     return true;
 }
 
-bool Model::triangulate(
-        QVector<int> &triangledFaceTextureVertexIndices, QVector<int> &triangledFaceVertexIndices,
-        QVector<int> &polygonOffsets) const
+void Model::calculateNewNormals()
 {
-    for(int startPolygonOffsetIndex = 0; startPolygonOffsetIndex < polygonOffsets.count() - 1; startPolygonOffsetIndex++) {
-        if (!isPolygonConvex(startPolygonOffsetIndex, polygonOffsets))
-            return false;
-        const int currentPolygonOffset = polygonOffsets[startPolygonOffsetIndex];
-        const int nextPolygonOffset = polygonOffsets[startPolygonOffsetIndex + 1];
-        for(int vertexIndex = currentPolygonOffset + 1; vertexIndex < nextPolygonOffset - 1; vertexIndex++) {
-            addVertexTriangle(triangledFaceVertexIndices, currentPolygonOffset, vertexIndex, vertexIndex + 1);
-            addTextureVertexTriangle(triangledFaceTextureVertexIndices, currentPolygonOffset, vertexIndex, vertexIndex + 1);
-        }
-    }
-    return true;
+    TranformationsForModel::calculateNormals(
+                this->normalsForVertices, this->triangledFaceVertexIndices, this->vertices, this->faceVertexIndices);
 }
 
-float Model::isPositiveValue(
-        const int vertexIndex, const int currentPolygonOffset,
-        const int nextPolygonOffset) const
+
+/*void Model::edgesFromVertices(
+        const int vertexIndex, const int currentPolygonOffset, const int nextPolygonOffset,
+        QVector3D &firstEdge, QVector3D &secondEdge) const
 {
     const QVector3D firstPoint = this->vertices[this->faceVertexIndices[vertexIndex] - 1];
     QVector3D secondPoint;
     QVector3D thirdPoint;
     if (vertexIndex + 1 == nextPolygonOffset) {
         secondPoint = this->vertices[this->faceVertexIndices[currentPolygonOffset] - 1];
-        thirdPoint = this->vertices[this->faceVertexIndices[currentPolygonOffset  +1] - 1];
+        thirdPoint = this->vertices[this->faceVertexIndices[currentPolygonOffset + 1] - 1];
     }
     else {
         secondPoint = this->vertices[this->faceVertexIndices[vertexIndex + 1] - 1];
@@ -83,44 +79,45 @@ float Model::isPositiveValue(
         else
             thirdPoint = this->vertices[this->faceVertexIndices[vertexIndex + 2] - 1];
     }
-    const QVector3D firstVector = secondPoint - firstPoint;
-    const QVector3D secondVector = thirdPoint - secondPoint;
-    const QVector3D multiplyFirstVectorsPare = firstVector * secondVector;
-    const float cosBetweenVectors = (multiplyFirstVectorsPare.x() + multiplyFirstVectorsPare.y() + multiplyFirstVectorsPare.z()) /
-            firstVector.length() / secondVector.length();
-    const float sinBetweenVectors = 1 - cosBetweenVectors*cosBetweenVectors;
+    firstEdge = secondPoint - firstPoint;
+    secondEdge = thirdPoint - secondPoint;
+}
+
+
+float Model::sinBetweenVectors(const QVector3D firstEdge, const QVector3D secondEdge) const
+{
+    const QVector3D scalarMultiplicationOfEdges = firstEdge * secondEdge;
+    const float cosBetweenVectors = (scalarMultiplicationOfEdges.x() + scalarMultiplicationOfEdges.y() + scalarMultiplicationOfEdges.z())
+            / firstEdge.length() / secondEdge.length();
+    const float sinBetweenVectors = 1 - cosBetweenVectors * cosBetweenVectors;
 
     return sinBetweenVectors;
+}
+
+float Model::signOfTurnSin(
+        const int vertexIndex, const int currentPolygonOffset,
+        const int nextPolygonOffset) const
+{
+    QVector3D firstEdge, secondEdge;
+    edgesFromVertices(vertexIndex, currentPolygonOffset, nextPolygonOffset, firstEdge, secondEdge);
+    const float sinOfTurn = sinBetweenVectors(firstEdge, secondEdge);
+    if (sinOfTurn > 0)
+        return 1;
+    else if (0 == sinOfTurn)
+        return 0;
+    else
+        return -1;
 }
 
 bool Model::isPolygonConvex(int startOffset, QVector<int> &polygonOffsets) const
 {
     const int currentPolygonOffset = polygonOffsets[startOffset];
     const int nextPolygonOffset = polygonOffsets[startOffset + 1];
-    for (int vertexIndex = currentPolygonOffset; vertexIndex < nextPolygonOffset - 1; vertexIndex += 2) {
-        if (isPositiveValue(vertexIndex, currentPolygonOffset, nextPolygonOffset) *
-                isPositiveValue(vertexIndex + 1, currentPolygonOffset, nextPolygonOffset) < 0)
+    for (int vertexIndex = currentPolygonOffset; vertexIndex < nextPolygonOffset - 1; vertexIndex += 1) {
+        if (signOfTurnSin(vertexIndex, currentPolygonOffset, nextPolygonOffset) *
+                signOfTurnSin(vertexIndex + 1, currentPolygonOffset, nextPolygonOffset) < 0)
             return false;
     }
     return true;
-}
-
-void Model::addVertexTriangle(
-        QVector<int> &triangledFaceVertexIndices, const int firstIndex,
-        const int secondIndex, const int thirdIndex) const
-{
-    triangledFaceVertexIndices.append(this->faceVertexIndices[firstIndex]);
-    triangledFaceVertexIndices.append(this->faceVertexIndices[secondIndex]);
-    triangledFaceVertexIndices.append(this->faceVertexIndices[thirdIndex]);
-}
-
-void Model::addTextureVertexTriangle(
-            QVector<int> &triangledFaceTextureVertexIndices, const int firstIndex,
-            const int secondIndex, const int thirdIndex) const
-{
-    triangledFaceTextureVertexIndices.append(this->faceVertexTextureIndices[firstIndex]);
-    triangledFaceTextureVertexIndices.append(this->faceVertexTextureIndices[secondIndex]);
-    triangledFaceTextureVertexIndices.append(this->faceVertexTextureIndices[thirdIndex]);
-}
-
+}*/
 

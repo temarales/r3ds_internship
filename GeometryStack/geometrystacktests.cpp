@@ -5,34 +5,105 @@ GeometryStackTests::GeometryStackTests(QObject *parent) : QObject(parent)
 
 }
 
-bool GeometryStackTests::vectorFuzzyCompare(const QVector<int> a, const QVector<int> b)
+void GeometryStackTests::testTriangulationTriangle()
 {
-    if (a.count() != b.count())
-        return false;
-    for (int i = 0; i < a.count(); i++)
-        if (a[i] != b[i])
-            return false;
-    return true;
+    const QVector<int> faceVertexIndices = {1, 3, 2};
+    const QVector<int> faceTextureVertexIndices = {2, 1, 3};
+    const QVector<int> polygonOffests = {0, 3};
+    const QVector<int> idealTriangledFaceVertexIndices = {1, 3, 2};
+    const QVector<int> idealTriangledFaceTextureVertexIndices = {2, 1, 3};
+    QVector<int> triangledFaceVertexIndices, triangledFaceTextureVertexIndices;
+    TranformationsForModel::triangulate(triangledFaceTextureVertexIndices, triangledFaceVertexIndices,
+                                        polygonOffests, faceVertexIndices, faceTextureVertexIndices);
+    QCOMPARE(triangledFaceTextureVertexIndices, idealTriangledFaceTextureVertexIndices);
+    QCOMPARE(triangledFaceVertexIndices, idealTriangledFaceVertexIndices);
+
 }
 
-void GeometryStackTests::testStandartTriangulation()
+void GeometryStackTests::testTriangulationQuadrangle()
 {
-    Model testModel = Model::modelFromFile("/home/temarales/ShowModel/r3ds/test.obj");
-    QVector<int> triangledVertexIndices = {1, 2, 3, 1, 3, 4, 4, 3, 1, 4, 1, 3};
-    QVector<int> triangledTextureVertexIndices = {1, 2, 3, 1, 3, 4, 4, 3, 2, 4, 2, 2};
-    QString error;
-    testModel.triangulate(error);
-    //vectorFuzzyCompare(triangledVertexIndices, testModel.triangledFaceVertexIndices);
-    //vectorFuzzyCompare(triangledTextureVertexIndices, testModel.triangledFaceTextureVertexIndices);
-    QCOMPARE(triangledVertexIndices, testModel.triangledFaceVertexIndices);
-    QCOMPARE(triangledTextureVertexIndices, testModel.triangledFaceTextureVertexIndices);
+    const QVector<int> faceVertexIndices = {1, 3, 2, 4};
+    const QVector<int> faceTextureVertexIndices = {2, 1, 3, 4};
+    const QVector<int> polygonOffests = {0, 4};
+    const QVector<int> idealTriangledFaceVertexIndices = {1, 3, 2, 1, 2, 4};
+    const QVector<int> idealTriangledFaceTextureVertexIndices = {2, 1, 3, 2, 3, 4};
+    QVector<int> triangledFaceVertexIndices, triangledFaceTextureVertexIndices;
+    TranformationsForModel::triangulate(triangledFaceTextureVertexIndices, triangledFaceVertexIndices,
+                                        polygonOffests, faceVertexIndices, faceTextureVertexIndices);
+    QCOMPARE(triangledFaceTextureVertexIndices, idealTriangledFaceTextureVertexIndices);
+    QCOMPARE(triangledFaceVertexIndices, idealTriangledFaceVertexIndices);
+
 }
 
-void GeometryStackTests::testConcavePolygon()
+void GeometryStackTests::testTriangulationPentagon()
 {
-    Model testModel = Model::modelFromFile("/home/temarales/ShowModel/r3ds/test.obj");
-    QVector<int> triangledVertexIndices = {};
-    QVector<int> triangledTextureVertexIndices = {};
-    QString error;
-    testModel.triangulate(error);
+    const QVector<int> faceVertexIndices = {1, 3, 2, 5, 4};
+    const QVector<int> faceTextureVertexIndices = {2, 1, 3, 2, 1};
+    const QVector<int> polygonOffests = {0, 5};
+    const QVector<int> idealTriangledFaceVertexIndices = {1, 3, 2, 1, 2, 5, 1, 5, 4};
+    const QVector<int> idealTriangledFaceTextureVertexIndices = {2, 1, 3, 2, 3, 2, 2, 2, 1};
+    QVector<int> triangledFaceVertexIndices, triangledFaceTextureVertexIndices;
+    TranformationsForModel::triangulate(triangledFaceTextureVertexIndices, triangledFaceVertexIndices,
+                                        polygonOffests, faceVertexIndices, faceTextureVertexIndices);
+    QCOMPARE(triangledFaceTextureVertexIndices, idealTriangledFaceTextureVertexIndices);
+    QCOMPARE(triangledFaceVertexIndices, idealTriangledFaceVertexIndices);
 }
+
+void GeometryStackTests::testTriangulationHexagon()
+{
+    const QVector<int> faceVertexIndices = {1, 3, 2, 4, 6, 5};
+    const QVector<int> faceTextureVertexIndices = {2, 1, 3, 4, 3, 1};
+    const QVector<int> polygonOffests = {0, 6};
+    const QVector<int> idealTriangledFaceVertexIndices = {1, 3, 2, 1, 2, 4, 1, 4, 6, 1, 6, 5};
+    const QVector<int> idealTriangledFaceTextureVertexIndices = {2, 1, 3, 2, 3, 4, 2, 4, 3, 2, 3, 1};
+    QVector<int> triangledFaceVertexIndices, triangledFaceTextureVertexIndices;
+    TranformationsForModel::triangulate(triangledFaceTextureVertexIndices, triangledFaceVertexIndices,
+                                        polygonOffests, faceVertexIndices, faceTextureVertexIndices);
+    QCOMPARE(triangledFaceTextureVertexIndices, idealTriangledFaceTextureVertexIndices);
+    QCOMPARE(triangledFaceVertexIndices, idealTriangledFaceVertexIndices);
+
+}
+
+void GeometryStackTests::testTriangulationHeptagon()
+{
+    const QVector<int> faceVertexIndices = {1, 3, 2, 4, 6, 5, 7};
+    const QVector<int> faceTextureVertexIndices = {2, 1, 3, 4, 4, 2, 5};
+    const QVector<int> polygonOffests = {0, 7};
+    const QVector<int> idealTriangledFaceVertexIndices = {1, 3, 2, 1, 2, 4, 1, 4, 6, 1, 6, 5, 1, 5, 7};
+    const QVector<int> idealTriangledFaceTextureVertexIndices = {2, 1, 3, 2, 3, 4, 2, 4, 4, 2, 4, 2, 2, 2, 5};
+    QVector<int> triangledFaceVertexIndices, triangledFaceTextureVertexIndices;
+    TranformationsForModel::triangulate(triangledFaceTextureVertexIndices, triangledFaceVertexIndices,
+                                        polygonOffests, faceVertexIndices, faceTextureVertexIndices);
+    QCOMPARE(triangledFaceTextureVertexIndices, idealTriangledFaceTextureVertexIndices);
+    QCOMPARE(triangledFaceVertexIndices, idealTriangledFaceVertexIndices);
+
+}
+
+void GeometryStackTests::testTriangulationSet()
+{
+    const QVector<int> faceVertexIndices = {1, 3, 2, 4, 6, 5, 7};
+    const QVector<int> faceTextureVertexIndices = {2, 1, 3, 4, 4, 2, 5};
+    const QVector<int> polygonOffests = {0, 3, 7};
+    const QVector<int> idealTriangledFaceVertexIndices = {1, 3, 2, 4, 6, 5, 4, 5, 7};
+    const QVector<int> idealTriangledFaceTextureVertexIndices = {2, 1, 3, 4, 4, 2, 4, 2, 5};
+    QVector<int> triangledFaceVertexIndices, triangledFaceTextureVertexIndices;
+    TranformationsForModel::triangulate(triangledFaceTextureVertexIndices, triangledFaceVertexIndices,
+                                        polygonOffests, faceVertexIndices, faceTextureVertexIndices);
+    QCOMPARE(triangledFaceTextureVertexIndices, idealTriangledFaceTextureVertexIndices);
+    QCOMPARE(triangledFaceVertexIndices, idealTriangledFaceVertexIndices);
+
+}
+
+void GeometryStackTests::testCalculateNormalsForVertices()
+{
+
+}
+
+/*void GeometryStackTests::testConcavePolygon()
+{
+    Model testModel = Model::modelFromFile("/home/temarales/ShowModel/r3ds/testIsConcave1.obj");
+    //QVector<int> triangledVertexIndices = {};
+    //QVector<int> triangledTextureVertexIndices = {};
+    QString error;
+    QVERIFY(!testModel.triangulate(error));
+}*/

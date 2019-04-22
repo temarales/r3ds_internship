@@ -6,6 +6,7 @@
 #include <QVector>
 #include <QPointF>
 #include "objparser.h"
+#include "tranformationsformodel.h"
 
 class Model
 {
@@ -25,23 +26,23 @@ public:
 
     QVector<int> triangledFaceVertexIndices;
     QVector<int> triangledFaceTextureVertexIndices;
+    QVector<QVector3D> normalsForVertices;
     static Model modelFromFile(const QString &filename);
-    bool triangulate(
-            QVector<int> &triangledFaceTextureVertexIndices, QVector<int> &triangledFaceVertexIndices,
-            QVector<int> &polygonOffsets) const;
     bool triangulate(QString &error);
-    bool isPolygonConvex(int startOffset, QVector<int> &polygonOffsets) const;
-    float isPositiveValue(
+    void calculateNewNormals();
+
+
+    /*bool isPolygonConvex(int startOffset, QVector<int> &polygonOffsets) const;
+    float sinBetweenVectors(const QVector3D firstEdge, const QVector3D secondEdge) const;
+    void edgesFromVertices(
+            const int vertexIndex, const int currentPolygonOffset, const int nextPolygonOffset,
+            QVector3D &firstEdge, QVector3D &secondEdge) const;
+    float signOfTurnSin(
             const int vertexIndex, const int currentPolygonOffset,
-            const int nextPolygonOffset) const;
+            const int nextPolygonOffset) const;*/
 
 private:
-    void addVertexTriangle(
-            QVector<int> &triangledFaceVertexIndices, const int firstIndex,
-            const int secondIndex, const int thirdIndex) const;
-    void addTextureVertexTriangle(
-            QVector<int> &triangledFaceTextureVertexIndices, const int firstIndex,
-            const int secondIndex, const int thirdIndex) const;
+    //bool vectorsFromPoints(const int vertexIndex, QVector3D &firstVector, QVector3D &secondVector) const;
 };
 
 #endif // MODEL_H

@@ -3,16 +3,23 @@
 
 #include <QTest>
 #include "model.h"
+#include "tranformationsformodel.h"
+
 class GeometryStackTests : public QObject
 {
     Q_OBJECT
 public:
     explicit GeometryStackTests(QObject *parent = 0);
-    bool vectorFuzzyCompare(const QVector<int> a, const QVector<int> b);
 
 private slots:
-    void testStandartTriangulation();
-    void testConcavePolygon();
+    void testTriangulationTriangle();
+    void testTriangulationQuadrangle();
+    void testTriangulationPentagon();
+    void testTriangulationHexagon();
+    void testTriangulationHeptagon();
+    void testTriangulationSet();
+    void testCalculateNormalsForVertices();
+    //void testConcavePolygon();
 };
 
 #endif // GEOMETRYSTACKTESTS_H
