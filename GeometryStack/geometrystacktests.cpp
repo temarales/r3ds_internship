@@ -94,16 +94,3 @@ void GeometryStackTests::testTriangulationSet()
 
 }
 
-void GeometryStackTests::testCalculateNormalsForVertices()
-{
-
-}
-
-/*void GeometryStackTests::testConcavePolygon()
-{
-    Model testModel = Model::modelFromFile("/home/temarales/ShowModel/r3ds/testIsConcave1.obj");
-    //QVector<int> triangledVertexIndices = {};
-    //QVector<int> triangledTextureVertexIndices = {};
-    QString error;
-    QVERIFY(!testModel.triangulate(error));
-}*/

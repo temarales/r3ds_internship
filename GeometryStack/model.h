@@ -7,8 +7,9 @@
 #include <QPointF>
 #include "objparser.h"
 #include "tranformationsformodel.h"
+#include "ipainter.h"
 
-class Model
+class Model : public IPainter
 {
 public:
     Model();
@@ -30,6 +31,7 @@ public:
     static Model modelFromFile(const QString &filename);
     bool triangulate(QString &error);
     void calculateNewNormals();
+    void draw(QOpenGLWidget* widget, ...) override;
 
 
     /*bool isPolygonConvex(int startOffset, QVector<int> &polygonOffsets) const;

@@ -36,6 +36,64 @@ Model Model::modelFromFile(const QString &filename)
 }
 
 
+void Model::draw(QOpenGLWidget* widget, ...)
+{
+    widget->makeCurrent();
+    for (int i = 0; i < this->triangledFaceVertexIndices.count(); i += 3) {
+        glColor3d(1,1,0);
+        glPolygonMode( GL_FRONT, GL_FILL );
+        glPolygonMode( GL_BACK, GL_LINE );
+        glBegin(GL_POLYGON);
+        glVertex3f(
+                    this->vertices[this->triangledFaceVertexIndices[i] - 1].x(),
+                this->vertices[this->triangledFaceVertexIndices[i] - 1].y(),
+                this->vertices[this->triangledFaceVertexIndices[i] - 1].z());
+        glVertex3f(
+                    this->vertices[this->triangledFaceVertexIndices[i + 1] - 1].x(),
+                this->vertices[this->triangledFaceVertexIndices[i + 1] - 1].y(),
+                this->vertices[this->triangledFaceVertexIndices[i + 1] - 1].z());
+        glVertex3f(
+                    this->vertices[this->triangledFaceVertexIndices[i + 2] - 1].x(),
+                this->vertices[this->triangledFaceVertexIndices[i + 2] - 1].y(),
+                this->vertices[this->triangledFaceVertexIndices[i + 2] - 1].z());
+        glEnd();
+        glColor3d(1,0,0);
+        glLineWidth(4);
+        glBegin(GL_LINES);
+        glVertex3f(
+                    this->vertices[this->triangledFaceVertexIndices[i] - 1].x(),
+                this->vertices[this->triangledFaceVertexIndices[i] - 1].y(),
+                this->vertices[this->triangledFaceVertexIndices[i] - 1].z());
+        glVertex3f(
+                    this->vertices[this->triangledFaceVertexIndices[i+1] - 1].x(),
+                this->vertices[this->triangledFaceVertexIndices[i+1] - 1].y(),
+                this->vertices[this->triangledFaceVertexIndices[i+1] - 1].z());
+        glEnd();
+        glBegin(GL_LINES);
+        glVertex3f(
+                    this->vertices[this->triangledFaceVertexIndices[i+1] - 1].x(),
+                this->vertices[this->triangledFaceVertexIndices[i+1] - 1].y(),
+                this->vertices[this->triangledFaceVertexIndices[i+1] - 1].z());
+        glVertex3f(
+                    this->vertices[this->triangledFaceVertexIndices[i+2] - 1].x(),
+                this->vertices[this->triangledFaceVertexIndices[i+2] - 1].y(),
+                this->vertices[this->triangledFaceVertexIndices[i+2] - 1].z());
+        glEnd();
+        glBegin(GL_LINES);
+        glVertex3f(
+                    this->vertices[this->triangledFaceVertexIndices[i] - 1].x(),
+                this->vertices[this->triangledFaceVertexIndices[i] - 1].y(),
+                this->vertices[this->triangledFaceVertexIndices[i] - 1].z());
+        glVertex3f(
+                    this->vertices[this->triangledFaceVertexIndices[i+2] - 1].x(),
+                this->vertices[this->triangledFaceVertexIndices[i+2] - 1].y(),
+                this->vertices[this->triangledFaceVertexIndices[i+2] - 1].z());
+        glEnd();
+    }
+    widget->doneCurrent();
+}
+
+
 bool Model::triangulate(QString &error)
 {
     QVector<int> triangledFaceTextureVertexIndices;
@@ -44,11 +102,9 @@ bool Model::triangulate(QString &error)
         error = "Triangulation has crashed, there are no texture vertices\n";
         return false;
     }
-    if (!TranformationsForModel::triangulate(triangledFaceTextureVertexIndices, triangledFaceVertexIndices,
-                     this->startPolygonOffsets, this->faceVertexIndices, this->faceVertexTextureIndices)) {
-        error = "Triangulation has crashed\n";
-        return false;
-    }
+    TranformationsForModel::triangulate(
+                triangledFaceTextureVertexIndices, triangledFaceVertexIndices,
+                this->startPolygonOffsets, this->faceVertexIndices, this->faceVertexTextureIndices);
     this->triangledFaceTextureVertexIndices = triangledFaceTextureVertexIndices;
     this->triangledFaceVertexIndices = triangledFaceVertexIndices;
     return true;
@@ -57,7 +113,7 @@ bool Model::triangulate(QString &error)
 void Model::calculateNewNormals()
 {
     TranformationsForModel::calculateNormals(
-                this->normalsForVertices, this->triangledFaceVertexIndices, this->vertices, this->faceVertexIndices);
+                this->normalsForVertices, this->triangledFaceVertexIndices, this->vertices);
 }
 
 

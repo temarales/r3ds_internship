@@ -1,13 +1,11 @@
 #include "tranformationsformodel.h"
 
-bool TranformationsForModel::triangulate(
+void TranformationsForModel::triangulate(
         QVector<int> &triangledFaceTextureVertexIndices, QVector<int> &triangledFaceVertexIndices,
         const QVector<int> &polygonOffsets, const QVector<int> &faceVertexIndices,
         const QVector<int> &faceTextureVertexIndices)
 {
     for(int startPolygonOffsetIndex = 0; startPolygonOffsetIndex < polygonOffsets.count() - 1; startPolygonOffsetIndex++) {
-        //if (!isPolygonConvex(startPolygonOffsetIndex, polygonOffsets))
-          //  return false;
         const int currentPolygonOffset = polygonOffsets[startPolygonOffsetIndex];
         const int nextPolygonOffset = polygonOffsets[startPolygonOffsetIndex + 1];
         for(int vertexIndex = currentPolygonOffset + 1; vertexIndex < nextPolygonOffset - 1; vertexIndex++) {
@@ -15,7 +13,6 @@ bool TranformationsForModel::triangulate(
             addTextureVertexTriangle(triangledFaceTextureVertexIndices, faceTextureVertexIndices, currentPolygonOffset, vertexIndex, vertexIndex + 1);
         }
     }
-    return true;
 }
 
 void TranformationsForModel::addVertexTriangle(
@@ -40,13 +37,12 @@ void TranformationsForModel::addTextureVertexTriangle(
 
 void TranformationsForModel::calculateNormals(
         QVector<QVector3D> &newNormalsForVertices,
-        const QVector<int> &triangledFaceVertexIndices, const QVector<QVector3D> &vertices,
-        const QVector<int> &faceVertexIndices)
+        const QVector<int> &triangledFaceVertexIndices, const QVector<QVector3D> &vertices)
 {
     QVector<QVector3D> normalsForTriangledPolygons;
     QVector<QVector3D> normalsForVertices;
     calculateNormalsForTriangulatedPolygons(
-                normalsForTriangledPolygons, triangledFaceVertexIndices, vertices, faceVertexIndices);
+                normalsForTriangledPolygons, triangledFaceVertexIndices, vertices);
     calculateNormalsForVertices(
                 normalsForVertices, triangledFaceVertexIndices, vertices, normalsForTriangledPolygons);
     newNormalsForVertices = normalsForVertices;
@@ -79,35 +75,36 @@ void TranformationsForModel::calculateNormalsForVertices(
         QVector3D newNormalForVertice;
         for (int normalIndex = 0; normalIndex < normalsOfVertex.count(); normalIndex++)
             newNormalForVertice += normalsOfVertex[normalIndex];
-        newNormalForVertice /= normalsOfVertex.count();
+        newNormalForVertice.normalize();
         newNormalsForVertices[vertexIndexInVertices] = newNormalForVertice;
     }
+
 }
 
 bool TranformationsForModel::calculateNormalsForTriangulatedPolygons(
         QVector<QVector3D> &normalsForTriangledPolygons,
-        const QVector<int> &triangledFaceVertexIndices, const QVector<QVector3D> &vertices,
-        const QVector<int> &faceVertexIndices)
+        const QVector<int> &triangledFaceVertexIndices, const QVector<QVector3D> &vertices)
 {
-    if (triangledFaceVertexIndices.count() == 0)
-        return false;
-    for(int vertexIndex = 0; vertexIndex < triangledFaceVertexIndices.count()/3; vertexIndex++) {
-        QVector3D firstVector, secondVector;
-        vectorsFromPoints(firstVector, secondVector, vertices, faceVertexIndices, vertexIndex);
+    Q_ASSERT(!triangledFaceVertexIndices.isEmpty());
+//    Q_ASSERT_X()
+    for(int vertexIndex = 0; vertexIndex < triangledFaceVertexIndices.count(); vertexIndex += 3) {
+        QVector3D firstVector;
+        QVector3D secondVector;
+        edgesFromVertices(firstVector, secondVector, vertices, triangledFaceVertexIndices, vertexIndex);
         const QVector3D normal = QVector3D::normal(firstVector, secondVector);
         normalsForTriangledPolygons.append(normal);
     }
     return true;
 }
 
-void TranformationsForModel::vectorsFromPoints(
+void TranformationsForModel::edgesFromVertices(
         QVector3D &firstVector, QVector3D &secondVector,
-        const QVector<QVector3D> vertices, const QVector<int> faceVertexIndices,
+        const QVector<QVector3D> vertices, const QVector<int> triangledFaceVertexIndices,
         const int vertexIndex)
 {
-    const QVector3D firstPoint = vertices[faceVertexIndices[vertexIndex] - 1];
-    const QVector3D secondPoint = vertices[faceVertexIndices[vertexIndex + 1] - 1];
-    const QVector3D thirdPoint = vertices[faceVertexIndices[vertexIndex + 2] - 1];
+    const QVector3D firstPoint = vertices[triangledFaceVertexIndices[vertexIndex] - 1];
+    const QVector3D secondPoint = vertices[triangledFaceVertexIndices[vertexIndex + 1] - 1];
+    const QVector3D thirdPoint = vertices[triangledFaceVertexIndices[vertexIndex + 2] - 1];
     firstVector = secondPoint - firstPoint;
-    secondVector = thirdPoint - secondPoint;
+    secondVector = thirdPoint - firstPoint;
 }

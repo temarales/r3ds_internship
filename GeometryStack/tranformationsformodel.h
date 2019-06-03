@@ -8,7 +8,7 @@
 
 namespace TranformationsForModel {
 
-bool triangulate(
+void triangulate(
         QVector<int> &triangledFaceTextureVertexIndices, QVector<int> &triangledFaceVertexIndices,
         const QVector<int> &polygonOffsets, const QVector<int> &faceVertexIndices,
         const QVector<int> &faceTextureVertexIndices);
@@ -23,17 +23,15 @@ void addTextureVertexTriangle(
 
 void calculateNormals(
         QVector<QVector3D> &newNormalsForVertices,
-        const QVector<int> &triangledFaceVertexIndices, const QVector<QVector3D> &vertices,
-        const QVector<int> &faceVertexIndices);
+        const QVector<int> &triangledFaceVertexIndices, const QVector<QVector3D> &vertices);
 void calculateNormalsForVertices(
         QVector<QVector3D> &newNormalsForVertices,
         const QVector<int> &triangledFaceVertexIndices, const QVector<QVector3D> &vertices,
         const QVector<QVector3D> &normalForTriangledPolygons);
 bool calculateNormalsForTriangulatedPolygons(
         QVector<QVector3D> &normalsForTriangledPolygons,
-        const QVector<int> &triangledFaceVertexIndices, const QVector<QVector3D> &vertices,
-        const QVector<int> &faceVertexIndices);
-void vectorsFromPoints(
+        const QVector<int> &triangledFaceVertexIndices, const QVector<QVector3D> &vertices);
+void edgesFromVertices(
         QVector3D &firstVector, QVector3D &secondVector,
         const QVector<QVector3D> vertices, const QVector<int> faceVertexIndices,
         const int vertexIndex);

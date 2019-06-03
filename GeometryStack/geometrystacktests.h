@@ -18,7 +18,7 @@ private slots:
     void testTriangulationHexagon();
     void testTriangulationHeptagon();
     void testTriangulationSet();
-    void testCalculateNormalsForVertices();
+    //void testCalculateNormalsForVertices();
     //void testConcavePolygon();
 };
 

@@ -12,6 +12,7 @@
 #include "drawstuff.h"
 #include "scene.h"
 #include <QPen>
+#include <QMdiArea>
 
 
 namespace Ui
@@ -36,6 +37,7 @@ class MainWindow : public QMainWindow
         Scene scene;
         DrawStuff drawer;
         Camera camera;
+        QMdiArea * mdiArea;
 
     protected:
         void paintEvent(QPaintEvent *event);
