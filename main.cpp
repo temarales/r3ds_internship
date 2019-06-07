@@ -2,7 +2,7 @@
 #include <QApplication>
 #include "test.h"
 #include "GeometryStack/geometrystacktests.h"
-#include "drawwindowgl.h"
+#include "DrawingTools/drawwindowgl.h"
 #include <QMdiSubWindow>
 
 void runTests()
@@ -21,8 +21,6 @@ int main(int argc, char *argv[])
 
     MainWindow w;
     w.show();
-
-
 
     return a.exec();
 }

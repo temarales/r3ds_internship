@@ -7,7 +7,7 @@
 #include <QPointF>
 #include "objparser.h"
 #include "tranformationsformodel.h"
-#include "ipainter.h"
+#include "DrawingTools/ipainter.h"
 
 class Model : public IPainter
 {
@@ -29,22 +29,12 @@ public:
     QVector<int> triangledFaceTextureVertexIndices;
     QVector<QVector3D> normalsForVertices;
     static Model modelFromFile(const QString &filename);
-    bool triangulate(QString &error);
+    void triangulate(QString &error);
     void calculateNewNormals();
-    void draw(QOpenGLWidget* widget, ...) override;
 
-
-    /*bool isPolygonConvex(int startOffset, QVector<int> &polygonOffsets) const;
-    float sinBetweenVectors(const QVector3D firstEdge, const QVector3D secondEdge) const;
-    void edgesFromVertices(
-            const int vertexIndex, const int currentPolygonOffset, const int nextPolygonOffset,
-            QVector3D &firstEdge, QVector3D &secondEdge) const;
-    float signOfTurnSin(
-            const int vertexIndex, const int currentPolygonOffset,
-            const int nextPolygonOffset) const;*/
-
-private:
-    //bool vectorsFromPoints(const int vertexIndex, QVector3D &firstVector, QVector3D &secondVector) const;
+    void draw(QOpenGLWidget* widget) override;
+    void drawOriginalGrid(QOpenGLWidget* widget) override;
+    void drawTriangledGrid(QOpenGLWidget* widget) override;
 };
 
 #endif // MODEL_H

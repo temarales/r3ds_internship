@@ -35,30 +35,12 @@ Model Model::modelFromFile(const QString &filename)
     return newModel;
 }
 
-
-void Model::draw(QOpenGLWidget* widget, ...)
+void Model::drawTriangledGrid(QOpenGLWidget* widget)
 {
     widget->makeCurrent();
+    glColor3d(1,0,0);
+    glLineWidth(4);
     for (int i = 0; i < this->triangledFaceVertexIndices.count(); i += 3) {
-        glColor3d(1,1,0);
-        glPolygonMode( GL_FRONT, GL_FILL );
-        glPolygonMode( GL_BACK, GL_LINE );
-        glBegin(GL_POLYGON);
-        glVertex3f(
-                    this->vertices[this->triangledFaceVertexIndices[i] - 1].x(),
-                this->vertices[this->triangledFaceVertexIndices[i] - 1].y(),
-                this->vertices[this->triangledFaceVertexIndices[i] - 1].z());
-        glVertex3f(
-                    this->vertices[this->triangledFaceVertexIndices[i + 1] - 1].x(),
-                this->vertices[this->triangledFaceVertexIndices[i + 1] - 1].y(),
-                this->vertices[this->triangledFaceVertexIndices[i + 1] - 1].z());
-        glVertex3f(
-                    this->vertices[this->triangledFaceVertexIndices[i + 2] - 1].x(),
-                this->vertices[this->triangledFaceVertexIndices[i + 2] - 1].y(),
-                this->vertices[this->triangledFaceVertexIndices[i + 2] - 1].z());
-        glEnd();
-        glColor3d(1,0,0);
-        glLineWidth(4);
         glBegin(GL_LINES);
         glVertex3f(
                     this->vertices[this->triangledFaceVertexIndices[i] - 1].x(),
@@ -93,21 +75,60 @@ void Model::draw(QOpenGLWidget* widget, ...)
     widget->doneCurrent();
 }
 
+void Model::drawOriginalGrid(QOpenGLWidget* widget)
+{
 
-bool Model::triangulate(QString &error)
+}
+
+void Model::draw(QOpenGLWidget* widget)
+{
+    widget->makeCurrent();
+    glColor3d(1,1,0);
+    glPolygonMode(GL_FRONT, GL_FILL);
+    glPolygonMode(GL_BACK, GL_LINE);
+
+    for (int i = 0; i < this->triangledFaceVertexIndices.count(); i += 3) {
+        glBegin(GL_POLYGON);
+        glNormal3f(this->normalsForVertices[this->triangledFaceVertexIndices[i] - 1].x(),
+                this->normalsForVertices[this->triangledFaceVertexIndices[i] - 1].y(),
+                this->normalsForVertices[this->triangledFaceVertexIndices[i] - 1].z());
+        glVertex3f(
+                    this->vertices[this->triangledFaceVertexIndices[i] - 1].x(),
+                this->vertices[this->triangledFaceVertexIndices[i] - 1].y(),
+                this->vertices[this->triangledFaceVertexIndices[i] - 1].z());
+        glNormal3f(this->normalsForVertices[this->triangledFaceVertexIndices[i + 1] - 1].x(),
+                this->normalsForVertices[this->triangledFaceVertexIndices[i + 1] - 1].y(),
+                this->normalsForVertices[this->triangledFaceVertexIndices[i + 1] - 1].z());
+        glVertex3f(
+                    this->vertices[this->triangledFaceVertexIndices[i + 1] - 1].x(),
+                this->vertices[this->triangledFaceVertexIndices[i + 1] - 1].y(),
+                this->vertices[this->triangledFaceVertexIndices[i + 1] - 1].z());
+        glNormal3f(this->normalsForVertices[this->triangledFaceVertexIndices[i + 2] - 1].x(),
+                this->normalsForVertices[this->triangledFaceVertexIndices[i + 2] - 1].y(),
+                this->normalsForVertices[this->triangledFaceVertexIndices[i + 2] - 1].z());
+        glVertex3f(
+                    this->vertices[this->triangledFaceVertexIndices[i + 2] - 1].x(),
+                this->vertices[this->triangledFaceVertexIndices[i + 2] - 1].y(),
+                this->vertices[this->triangledFaceVertexIndices[i + 2] - 1].z());
+        glEnd();
+    }
+    widget->doneCurrent();
+}
+
+
+void Model::triangulate(QString &error)
 {
     QVector<int> triangledFaceTextureVertexIndices;
     QVector<int> triangledFaceVertexIndices;
-    if (this->faceVertexTextureIndices.count() == 0) {
+    Q_ASSERT(!this->faceVertexTextureIndices.count() == 0);
+    /*if (this->faceVertexTextureIndices.count() == 0) {
         error = "Triangulation has crashed, there are no texture vertices\n";
-        return false;
-    }
+    }*/
     TranformationsForModel::triangulate(
                 triangledFaceTextureVertexIndices, triangledFaceVertexIndices,
                 this->startPolygonOffsets, this->faceVertexIndices, this->faceVertexTextureIndices);
     this->triangledFaceTextureVertexIndices = triangledFaceTextureVertexIndices;
     this->triangledFaceVertexIndices = triangledFaceVertexIndices;
-    return true;
 }
 
 void Model::calculateNewNormals()
@@ -115,65 +136,3 @@ void Model::calculateNewNormals()
     TranformationsForModel::calculateNormals(
                 this->normalsForVertices, this->triangledFaceVertexIndices, this->vertices);
 }
-
-
-/*void Model::edgesFromVertices(
-        const int vertexIndex, const int currentPolygonOffset, const int nextPolygonOffset,
-        QVector3D &firstEdge, QVector3D &secondEdge) const
-{
-    const QVector3D firstPoint = this->vertices[this->faceVertexIndices[vertexIndex] - 1];
-    QVector3D secondPoint;
-    QVector3D thirdPoint;
-    if (vertexIndex + 1 == nextPolygonOffset) {
-        secondPoint = this->vertices[this->faceVertexIndices[currentPolygonOffset] - 1];
-        thirdPoint = this->vertices[this->faceVertexIndices[currentPolygonOffset + 1] - 1];
-    }
-    else {
-        secondPoint = this->vertices[this->faceVertexIndices[vertexIndex + 1] - 1];
-        if (vertexIndex + 2 == nextPolygonOffset)
-            thirdPoint = this->vertices[this->faceVertexIndices[currentPolygonOffset] - 1];
-        else
-            thirdPoint = this->vertices[this->faceVertexIndices[vertexIndex + 2] - 1];
-    }
-    firstEdge = secondPoint - firstPoint;
-    secondEdge = thirdPoint - secondPoint;
-}
-
-
-float Model::sinBetweenVectors(const QVector3D firstEdge, const QVector3D secondEdge) const
-{
-    const QVector3D scalarMultiplicationOfEdges = firstEdge * secondEdge;
-    const float cosBetweenVectors = (scalarMultiplicationOfEdges.x() + scalarMultiplicationOfEdges.y() + scalarMultiplicationOfEdges.z())
-            / firstEdge.length() / secondEdge.length();
-    const float sinBetweenVectors = 1 - cosBetweenVectors * cosBetweenVectors;
-
-    return sinBetweenVectors;
-}
-
-float Model::signOfTurnSin(
-        const int vertexIndex, const int currentPolygonOffset,
-        const int nextPolygonOffset) const
-{
-    QVector3D firstEdge, secondEdge;
-    edgesFromVertices(vertexIndex, currentPolygonOffset, nextPolygonOffset, firstEdge, secondEdge);
-    const float sinOfTurn = sinBetweenVectors(firstEdge, secondEdge);
-    if (sinOfTurn > 0)
-        return 1;
-    else if (0 == sinOfTurn)
-        return 0;
-    else
-        return -1;
-}
-
-bool Model::isPolygonConvex(int startOffset, QVector<int> &polygonOffsets) const
-{
-    const int currentPolygonOffset = polygonOffsets[startOffset];
-    const int nextPolygonOffset = polygonOffsets[startOffset + 1];
-    for (int vertexIndex = currentPolygonOffset; vertexIndex < nextPolygonOffset - 1; vertexIndex += 1) {
-        if (signOfTurnSin(vertexIndex, currentPolygonOffset, nextPolygonOffset) *
-                signOfTurnSin(vertexIndex + 1, currentPolygonOffset, nextPolygonOffset) < 0)
-            return false;
-    }
-    return true;
-}*/
-

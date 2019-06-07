@@ -6,14 +6,85 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>744</width>
-    <height>473</height>
+    <width>934</width>
+    <height>585</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
-  <widget class="QWidget" name="centralWidget"/>
+  <widget class="QWidget" name="centralWidget">
+   <widget class="QGroupBox" name="groupBox">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>169</y>
+      <width>281</width>
+      <height>191</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Display mode</string>
+    </property>
+    <property name="flat">
+     <bool>false</bool>
+    </property>
+    <widget class="QRadioButton" name="withoutGridRB">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>50</y>
+       <width>160</width>
+       <height>30</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Without grid</string>
+     </property>
+    </widget>
+    <widget class="QRadioButton" name="withOriginalGridRB">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>90</y>
+       <width>211</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>With original grid</string>
+     </property>
+    </widget>
+    <widget class="QRadioButton" name="withTriangledGridRB">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>140</y>
+       <width>160</width>
+       <height>30</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>With triangled grid</string>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QMdiArea" name="mdiArea">
+    <property name="geometry">
+     <rect>
+      <x>320</x>
+      <y>150</y>
+      <width>611</width>
+      <height>401</height>
+     </rect>
+    </property>
+    <widget class="QWidget" name="subwindow">
+     <property name="windowTitle">
+      <string>Subwindow</string>
+     </property>
+    </widget>
+   </widget>
+  </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">
     <enum>TopToolBarArea</enum>

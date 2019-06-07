@@ -39,3 +39,18 @@ void Camera::moveCloserOrFurther(int value)
 {
     camera_position.setZ(camera_position.z() + value);
 }
+
+float Camera::xPosition() const
+{
+    return camera_position.x();
+}
+
+float Camera::yPosition() const
+{
+    return camera_position.y();
+}
+
+float Camera::zPosition() const
+{
+    return camera_position.z();
+}

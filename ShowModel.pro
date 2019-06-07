@@ -12,24 +12,19 @@ LIBS = -lglut -lGLU
 
 include($$PWD/GeometryStack/GeometryStackTest.pri)
 include($$PWD/GeometryStack/GeometryStack.pri)
+include($$PWD/DrawingTools/DrawingTools.pri)
 
 # Input
 HEADERS += camera.h \
-           drawstuff.h \
-           drawwindowgl.h \
            mainwindow.h \
            matrix_oper.h \
            scene.h \
-           test.h \
-    ipainter.h
+           test.h
 FORMS += mainwindow.ui
 SOURCES += camera.cpp \
-           drawstuff.cpp \
-           drawwindowgl.cpp \
            main.cpp \
            mainwindow.cpp \
            matrix_oper.cpp \
            scene.cpp \
-           test.cpp \
-    ipainter.cpp
+           test.cpp
 

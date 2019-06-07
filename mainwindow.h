@@ -9,7 +9,7 @@
 #include <QVector3D>
 #include <QVector2D>
 #include "GeometryStack/objparser.h"
-#include "drawstuff.h"
+#include "DrawingTools/drawstuff.h"
 #include "scene.h"
 #include <QPen>
 #include <QMdiArea>
@@ -37,6 +37,7 @@ class MainWindow : public QMainWindow
         Scene scene;
         DrawStuff drawer;
         Camera camera;
+        QWidget* widget;
         QMdiArea * mdiArea;
 
     protected:

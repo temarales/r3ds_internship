@@ -16,9 +16,11 @@ public:
     void initializeGL() override;
     void resizeGL(int nWidth, int nHeight) override;
     void paintGL() override;
+    void repaint();
+
 private:
-    Scene scene;
-    Camera camera;
+    Scene *scene;
+    Camera *camera;
 };
 
 #endif // DRAWWINDOWGL_H

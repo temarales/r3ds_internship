@@ -12,6 +12,3 @@ SOURCES += \
 
 }
 
-HEADERS +=
-
-SOURCES +=

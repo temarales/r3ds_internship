@@ -25,6 +25,10 @@ public:
     void changeCameraPositionOn(QVector3D shift);
     void moveCloserOrFurther(int value);
 
+    float xPosition() const;
+    float yPosition() const;
+    float zPosition() const;
+
 //    //Getter
 //    QVector3D xVector() const;
 //    //Setter
