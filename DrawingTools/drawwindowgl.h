@@ -6,6 +6,7 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 #include "scene.h"
+#include <QColor>
 
 
 class DrawWindowGL : public QOpenGLWidget
@@ -18,9 +19,12 @@ public:
     void paintGL() override;
     void repaint();
 
+    void setBackgroundcolor(const QColor &backgroundcolor);
+
 private:
     Scene *scene;
     Camera *camera;
+    QColor m_backgroundcolor;
 };
 
 #endif // DRAWWINDOWGL_H

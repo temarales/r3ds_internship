@@ -35,6 +35,11 @@ Model Model::modelFromFile(const QString &filename)
     return newModel;
 }
 
+QVector3D Model::getVertexByTriangledFaceVertexIndex(int indexInTriangledFaceVertexIndices)
+{
+    return this->vertices[this->triangledFaceVertexIndices[indexInTriangledFaceVertexIndices] - 1];
+}
+
 void Model::drawTriangledGrid(QOpenGLWidget* widget)
 {
     widget->makeCurrent();
@@ -89,6 +94,7 @@ void Model::draw(QOpenGLWidget* widget)
 
     for (int i = 0; i < this->triangledFaceVertexIndices.count(); i += 3) {
         glBegin(GL_POLYGON);
+        //glPushMatrix();
         glNormal3f(this->normalsForVertices[this->triangledFaceVertexIndices[i] - 1].x(),
                 this->normalsForVertices[this->triangledFaceVertexIndices[i] - 1].y(),
                 this->normalsForVertices[this->triangledFaceVertexIndices[i] - 1].z());
@@ -111,7 +117,9 @@ void Model::draw(QOpenGLWidget* widget)
                 this->vertices[this->triangledFaceVertexIndices[i + 2] - 1].y(),
                 this->vertices[this->triangledFaceVertexIndices[i + 2] - 1].z());
         glEnd();
+        //glPopMatrix();
     }
+    glFlush();
     widget->doneCurrent();
 }
 

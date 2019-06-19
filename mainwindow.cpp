@@ -13,6 +13,15 @@ MainWindow::MainWindow(QWidget *parent) :
     open_button->setGeometry(QRect(QPoint(0, 0), QSize(200, 50)));
     connect(open_button, SIGNAL (released()), this, SLOT (handleButton()));
 
+    mdiArea = new QMdiArea(this);
+    //setCentralWidget(mdiArea);
+    mdiArea->setGeometry(300, 150, 640, 440);
+    widget = new DrawWindowGL(mdiArea, &scene, &camera);
+    QGridLayout *gridLayout = new QGridLayout(widget);
+    widget->setLayout(gridLayout);
+    mdiArea->addSubWindow(widget);
+    widget->showMaximized();
+
     camera = Camera(QVector3D(20, 35, 15), QVector3D(0, 0, 0), QVector3D(0, 1, 0));
     Scene scene;
 }
@@ -29,14 +38,8 @@ void MainWindow::handleButton()
     newModel.calculateNewNormals();
     scene.addNewModel(newModel);
 
-    //QWidget* widget;
-    /*QMdiArea**/ mdiArea = new QMdiArea;
-    QMdiSubWindow* sub_window = mdiArea->addSubWindow(new DrawWindowGL(this, &scene, &camera));
-    sub_window->setWindowState(Qt::WindowMaximized);
-    widget = dynamic_cast<QWidget*>(mdiArea);
-    widget->show();
-
-    repaint();
+    widget->repaint();
+    //repaint();
 }
 
 void MainWindow::paintEvent(QPaintEvent *event)
@@ -56,16 +59,24 @@ void MainWindow::paintEvent(QPaintEvent *event)
 void MainWindow::keyPressEvent(QKeyEvent *ev)
 {
     if(ev->key() == Qt::Key_W)
+    {
+        widget->setBackgroundcolor(Qt::green);
         camera.moveCloserOrFurther(-2);
+    }
     if(ev->key() == Qt::Key_S)
+    {
+        widget->setBackgroundcolor(Qt::gray);
         camera.moveCloserOrFurther(2);
+    }
     if(ev->key() == Qt::Key_D)
         camera.moveHorizontal(2);
     if (ev->key() == Qt::Key_A)
-        camera.moveHorizontal(-2);
+        camera.moveHorizontal(-10);
 
     widget->repaint();
-    //repaint();
+    widget->update();
+    this->repaint();
+    this->update();
 }
 
 

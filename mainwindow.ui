@@ -69,21 +69,6 @@
      </property>
     </widget>
    </widget>
-   <widget class="QMdiArea" name="mdiArea">
-    <property name="geometry">
-     <rect>
-      <x>320</x>
-      <y>150</y>
-      <width>611</width>
-      <height>401</height>
-     </rect>
-    </property>
-    <widget class="QWidget" name="subwindow">
-     <property name="windowTitle">
-      <string>Subwindow</string>
-     </property>
-    </widget>
-   </widget>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">

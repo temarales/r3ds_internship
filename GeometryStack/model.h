@@ -31,6 +31,7 @@ public:
     static Model modelFromFile(const QString &filename);
     void triangulate(QString &error);
     void calculateNewNormals();
+    QVector3D getVertexByTriangledFaceVertexIndex(int indexInTriangledFaceVertexIndices);
 
     void draw(QOpenGLWidget* widget) override;
     void drawOriginalGrid(QOpenGLWidget* widget) override;
