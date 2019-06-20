@@ -38,34 +38,24 @@ void DrawWindowGL::resizeGL(int nWidth, int nHeight)
     gluPerspective(45, (float)nWidth/nHeight, 0.01, 100.0);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    //glRotatef(10, 1.0, 0.0, 0.0);
-    gluLookAt(camera->xPosition(), camera->yPosition(), camera->zPosition(), 0, 0, 0, 0, 1, 0);
 }
 
 void DrawWindowGL::paintGL()
 {
-    glClearColor(m_backgroundcolor.redF(),m_backgroundcolor.greenF(), m_backgroundcolor.blueF(),1);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    scene->draw(this);
-}
-
-void DrawWindowGL::repaint()
-{
+    QMatrix4x4 translate;
+    QMatrix4x4 rotate;
+    QMatrix4x4 modelViewM;
+    translate.translate(0, 0, -50);
+    rotate.rotate(90, 0, 1, 0);
+    modelViewM = translate * rotate;
     glClearColor(m_backgroundcolor.redF(),m_backgroundcolor.greenF(), m_backgroundcolor.blueF(),1);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    glRotatef(10, 1.0, 0.0, 0.0);
-    gluLookAt(camera->xPosition(), camera->yPosition(), camera->zPosition(), 0, 0, 0, 0, 1, 0);
-
-    GLfloat m[50];
-      for(int i = 0; i < 16; i++)
-        m[i] = 0;
-    glGetFloatv(GL_MODELVIEW_MATRIX, m);
+    //glMultMatrixf(modelViewM.constData());
+    glMultMatrixf(camera->view_matrix().constData());
     scene->draw(this);
 
-
-    this->update();
 }
 
 void DrawWindowGL::setBackgroundcolor(const QColor &backgroundcolor)

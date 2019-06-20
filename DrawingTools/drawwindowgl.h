@@ -17,7 +17,7 @@ public:
     void initializeGL() override;
     void resizeGL(int nWidth, int nHeight) override;
     void paintGL() override;
-    void repaint();
+    //void repaint();
 
     void setBackgroundcolor(const QColor &backgroundcolor);
 

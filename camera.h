@@ -3,6 +3,8 @@
 
 #include <QVector3D>
 #include <QMatrix4x4>
+#include <QVector3D>
+#include <math.h>
 
 
 class Camera //https://habr.com/ru/post/327604/
@@ -24,6 +26,7 @@ public:
     void moveHorizontal(int value);
     void changeCameraPositionOn(QVector3D shift);
     void moveCloserOrFurther(int value);
+    void RotateView(float angle, float x, float y, float z);
 
     float xPosition() const;
     float yPosition() const;

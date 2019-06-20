@@ -22,7 +22,7 @@ MainWindow::MainWindow(QWidget *parent) :
     mdiArea->addSubWindow(widget);
     widget->showMaximized();
 
-    camera = Camera(QVector3D(20, 35, 15), QVector3D(0, 0, 0), QVector3D(0, 1, 0));
+    camera = Camera(QVector3D(0, 20, 70), QVector3D(0, 0, 0), QVector3D(0, 1, 0));
     Scene scene;
 }
 
@@ -69,14 +69,15 @@ void MainWindow::keyPressEvent(QKeyEvent *ev)
         camera.moveCloserOrFurther(2);
     }
     if(ev->key() == Qt::Key_D)
-        camera.moveHorizontal(2);
+    {
+        camera.RotateView(-10, 1, 1, 1);
+    }
     if (ev->key() == Qt::Key_A)
-        camera.moveHorizontal(-10);
+    {
+        camera.RotateView(10, 1, 1, 1);
+    }
 
-    widget->repaint();
     widget->update();
-    this->repaint();
-    this->update();
 }
 
 

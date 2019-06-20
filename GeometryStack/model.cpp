@@ -129,9 +129,6 @@ void Model::triangulate(QString &error)
     QVector<int> triangledFaceTextureVertexIndices;
     QVector<int> triangledFaceVertexIndices;
     Q_ASSERT(!this->faceVertexTextureIndices.count() == 0);
-    /*if (this->faceVertexTextureIndices.count() == 0) {
-        error = "Triangulation has crashed, there are no texture vertices\n";
-    }*/
     TranformationsForModel::triangulate(
                 triangledFaceTextureVertexIndices, triangledFaceVertexIndices,
                 this->startPolygonOffsets, this->faceVertexIndices, this->faceVertexTextureIndices);
